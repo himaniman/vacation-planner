@@ -2,6 +2,8 @@
 
 A tiny local, browser-only vacation planner.
 
+**Live app:** https://himaniman.github.io/vacation-planner/
+
 ## Run
 
 Requires Node.js 22.18+ and npm. On Windows, double-click `start.cmd`, or run:
@@ -67,6 +69,9 @@ shown on screen. Unreadable existing data is not automatically overwritten.
 Create a public GitHub repository and push this project on `main`. In the
 repository, select **Settings → Pages → Build and deployment → Source → GitHub
 Actions** before the first push.
+
+If GitHub creates a `github-pages` environment with a deployment branch rule,
+make sure that rule allows `main` under **Settings → Environments → github-pages**.
 
 The workflow in `.github/workflows/pages.yml` installs dependencies, runs tests,
 builds the app, and deploys `dist/` on each push to `main`. It can also be started
