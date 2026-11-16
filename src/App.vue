@@ -158,6 +158,10 @@ function deleteVacation(v: Vacation) {
   if (editingVacation.value === v.id) resetVacation()
   notify('Отпуск удалён.')
 }
+function deleteEditedVacation() {
+  const vacation = data.value.vacations.find(v => v.id === editingVacation.value)
+  if (vacation) deleteVacation(vacation)
+}
 
 const ruleA = ref('')
 const ruleB = ref('')
@@ -288,7 +292,7 @@ async function uploadCsv(event: Event) {
           <label for="vacation-person">Сотрудник</label><select id="vacation-person" v-model="vacationPerson" required :disabled="!data.people.length"><option disabled value="">Выберите сотрудника</option><option v-for="person in data.people" :key="person.id" :value="person.id">{{ person.name }}</option></select>
           <div class="date-fields"><div><label for="vacation-start">С даты</label><input id="vacation-start" v-model="vacationStart" type="date" min="1900-01-01" max="9999-12-31" required /></div><div><label for="vacation-end">По дату</label><input id="vacation-end" v-model="vacationEnd" type="date" :min="vacationStart || '1900-01-01'" max="9999-12-31" required /></div></div>
           <p class="field-hint">{{ isDate(vacationStart) && isDate(vacationEnd) && vacationEnd >= vacationStart ? `${daysText(daysBetween(vacationStart, vacationEnd))}, включая выходные` : isDate(vacationStart) && isDate(vacationEnd) ? 'Окончание раньше начала — исправьте дату «По дату»' : 'Укажите начало и окончание отпуска' }}</p>
-          <div class="form-actions"><button class="button primary" type="submit" :disabled="!data.people.length">{{ editingVacation ? 'Сохранить изменения' : '+ Добавить отпуск' }}</button><button v-if="editingVacation" class="button secondary" type="button" @click="resetVacation">Отмена</button></div>
+          <div class="form-actions"><button class="button primary" type="submit" :disabled="!data.people.length">{{ editingVacation ? 'Сохранить изменения' : '+ Добавить отпуск' }}</button><button v-if="editingVacation" class="button secondary" type="button" @click="resetVacation">Отмена</button><button v-if="editingVacation" class="button secondary delete" type="button" @click="deleteEditedVacation">Удалить</button></div>
         </form>
       </section>
 

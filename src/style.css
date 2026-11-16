@@ -26,6 +26,8 @@ h3 { font-size: 20px; }
 .button.primary:hover:not(:disabled) { background: #1a5146; }
 .button.secondary { background: #fff; border-color: #dbe2dc; color: #3b574c; }
 .button.secondary:hover:not(:disabled) { background: #f0f4ef; border-color: #a8bcb0; }
+.button.secondary.delete { color: #a25645; border-color: #efd0c5; }
+.button.secondary.delete:hover:not(:disabled) { background: #fff0ec; border-color: #e2b3a4; }
 .card { background: #fff; border: 1px solid #dfe5dc; border-radius: 14px; box-shadow: 0 2px 4px #253d2c03; }
 .section-heading { justify-content: space-between; gap: 12px; margin-bottom: 20px; }
 .timeline-heading { padding: 24px 26px 0; }
