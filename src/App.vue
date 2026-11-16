@@ -123,6 +123,10 @@ const editingVacation = ref('')
 const vacationPerson = ref(data.value.people[0]?.id ?? '')
 const vacationStart = ref(today)
 const vacationEnd = ref(today)
+// Keep the end date valid when the start moves past it, e.g. when adding another interval later in the year.
+watch(vacationStart, start => {
+  if (isDate(start) && isDate(vacationEnd.value) && vacationEnd.value < start) vacationEnd.value = start
+})
 function resetVacation() {
   editingVacation.value = ''
   vacationPerson.value = data.value.people[0]?.id ?? ''
@@ -280,10 +284,10 @@ async function uploadCsv(event: Event) {
 
       <section ref="vacationForm" class="card editor-card" :class="{ editing: editingVacation }" aria-labelledby="vacation-title">
         <div class="section-heading"><h2 id="vacation-title">{{ editingVacation ? 'Изменить отпуск' : 'Добавить отпуск' }}</h2><span class="step-label">02</span></div>
-        <form @submit.prevent="saveVacation">
+        <form novalidate @submit.prevent="saveVacation">
           <label for="vacation-person">Сотрудник</label><select id="vacation-person" v-model="vacationPerson" required :disabled="!data.people.length"><option disabled value="">Выберите сотрудника</option><option v-for="person in data.people" :key="person.id" :value="person.id">{{ person.name }}</option></select>
           <div class="date-fields"><div><label for="vacation-start">С даты</label><input id="vacation-start" v-model="vacationStart" type="date" min="1900-01-01" max="9999-12-31" required /></div><div><label for="vacation-end">По дату</label><input id="vacation-end" v-model="vacationEnd" type="date" :min="vacationStart || '1900-01-01'" max="9999-12-31" required /></div></div>
-          <p class="field-hint">{{ isDate(vacationStart) && isDate(vacationEnd) && vacationEnd >= vacationStart ? `${daysText(daysBetween(vacationStart, vacationEnd))}, включая выходные` : 'Укажите начало и окончание отпуска' }}</p>
+          <p class="field-hint">{{ isDate(vacationStart) && isDate(vacationEnd) && vacationEnd >= vacationStart ? `${daysText(daysBetween(vacationStart, vacationEnd))}, включая выходные` : isDate(vacationStart) && isDate(vacationEnd) ? 'Окончание раньше начала — исправьте дату «По дату»' : 'Укажите начало и окончание отпуска' }}</p>
           <div class="form-actions"><button class="button primary" type="submit" :disabled="!data.people.length">{{ editingVacation ? 'Сохранить изменения' : '+ Добавить отпуск' }}</button><button v-if="editingVacation" class="button secondary" type="button" @click="resetVacation">Отмена</button></div>
         </form>
       </section>
